@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_cloudos" default="compile.module.cloudos">
+  <dirname property="module.cloudos.basedir" file="${ant.file.module_cloudos}"/>
+  
+  <property name="module.jdk.home.cloudos" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.cloudos" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.cloudos" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.cloudos" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
+  
+  <property name="cloudos.output.dir" value="${module.cloudos.basedir}/build/classes/main"/>
+  <property name="cloudos.testoutput.dir" value="${module.cloudos.basedir}/build/classes/test"/>
+  
+  <path id="cloudos.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="cloudos.module.production.classpath">
+    <path refid="${module.jdk.classpath.cloudos}"/>
+  </path>
+  
+  <path id="cloudos.runtime.production.module.classpath">
+    <pathelement location="${cloudos.output.dir}"/>
+  </path>
+  
+  <path id="cloudos.module.classpath">
+    <path refid="${module.jdk.classpath.cloudos}"/>
+    <pathelement location="${cloudos.output.dir}"/>
+    <path refid="library.gradle:_junit:junit:4.11.classpath"/>
+    <path refid="library.gradle:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+  </path>
+  
+  <path id="cloudos.runtime.module.classpath">
+    <pathelement location="${cloudos.testoutput.dir}"/>
+    <pathelement location="${cloudos.output.dir}"/>
+    <path refid="library.gradle:_junit:junit:4.11.classpath"/>
+    <path refid="library.gradle:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.cloudos">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.cloudos">
+    <patternset refid="excluded.from.module.cloudos"/>
+  </patternset>
+  
+  
+  <target name="compile.module.cloudos" depends="compile.module.cloudos.production,compile.module.cloudos.tests" description="Compile module cloudos"/>
+  
+  <target name="compile.module.cloudos.production" depends="register.custom.compilers" description="Compile module cloudos; production classes"/>
+  
+  <target name="compile.module.cloudos.tests" depends="register.custom.compilers,compile.module.cloudos.production" description="compile module cloudos; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.cloudos" description="cleanup module">
+    <delete dir="${cloudos.output.dir}"/>
+    <delete dir="${cloudos.testoutput.dir}"/>
+  </target>
+</project>

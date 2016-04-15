@@ -1,0 +1,4 @@
+rootProject.name = 'cloudos'
+include 'cloudos-prototype'
+include 'jserey-demo'
+
