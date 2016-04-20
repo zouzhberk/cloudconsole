@@ -10,5 +10,5 @@ import java.lang.annotation.*;
 @Documented
 public @interface Binding
 {
-    String value();
+    String value() default "";
 }

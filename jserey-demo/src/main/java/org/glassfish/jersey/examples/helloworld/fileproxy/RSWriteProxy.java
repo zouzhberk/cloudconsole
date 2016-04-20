@@ -12,11 +12,11 @@ public abstract class RSWriteProxy extends FileProxy
     }
 
     @Override
-    public void write()
+    public void write(String content)
     {
-        post();
+        post(content);
     }
 
-    protected abstract void post();
+    protected abstract void post(String content);
 
 }

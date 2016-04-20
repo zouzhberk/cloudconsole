@@ -17,32 +17,9 @@ public abstract class FileProxy
 {
     public String path;
 
-    public abstract Object read();
-
-    public void write()
-    {
-
-    }
-
-    public String help()
-    {
-        return "";
-    }
-
-    public long getSize()
-    {
-        return 1;
-    }
-
     public static <T> T getInstance(Class<T> clazz)
     {
         return ResourceFactory.getInstance(clazz);
-    }
-
-    public String getPathParam(String tag)
-    {
-        Matcher matcher = Pattern.compile("").matcher(path);
-        return "";
     }
 
     /**
@@ -57,6 +34,35 @@ public abstract class FileProxy
 
     }
 
+    public static void main(String[] args)
+    {
+        String url = "/cloudos/virtualmachine/{name}/clouddisk/{diskname}";
+        System.out.println(getPathNames(url));
+    }
+
+    public abstract Object read();
+
+    public void write(String content)
+    {
+
+    }
+
+    public String help()
+    {
+        return "";
+    }
+
+    public long getSize()
+    {
+        return 1;
+    }
+
+    public String getPathParam(String tag)
+    {
+        Matcher matcher = Pattern.compile("").matcher(path);
+        return "";
+    }
+
     public Map<String, String> getPathParams(List<String> groupNames)
     {
         Binding binding = getClass().getAnnotation(Binding.class);
@@ -64,11 +70,5 @@ public abstract class FileProxy
         Map<String, String> groupValues = Maps.newLinkedHashMap();
         PatternUtil.match(regex, path, groupNames, groupValues);
         return groupValues;
-    }
-
-    public static void main(String[] args)
-    {
-        String url = "/cloudos/virtualmachine/{name}/clouddisk/{diskname}";
-        System.out.println(getPathNames(url));
     }
 }

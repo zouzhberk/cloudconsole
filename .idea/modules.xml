@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/cloudos.iml" filepath="$PROJECT_DIR$/cloudos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cloudos-prototype/cloudos-prototype.iml" filepath="$PROJECT_DIR$/cloudos-prototype/cloudos-prototype.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jserey-demo/jserey-demo.iml" filepath="$PROJECT_DIR$/jserey-demo/jserey-demo.iml" />
+    </modules>
+  </component>
+</project>
