@@ -37,12 +37,9 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.jersey.examples.helloworld;
+package org.glassfish.jersey.examples.helloworld.rest;
 
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.jersey.examples.helloworld.rest.CloudOSResource;
-import org.glassfish.jersey.examples.helloworld.rest.HelloWorldResource;
-import org.glassfish.jersey.examples.helloworld.rest.VirtualMachineResource;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 

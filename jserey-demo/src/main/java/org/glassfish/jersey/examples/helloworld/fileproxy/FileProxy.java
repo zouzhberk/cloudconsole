@@ -13,9 +13,8 @@ import java.util.stream.Stream;
 /**
  * Created by berk (zouzhberk@163.com)) on 4/14/16.
  */
-public abstract class FileProxy
+public abstract class FileProxy extends ElementalProxy
 {
-    public String path;
 
     public static <T> T getInstance(Class<T> clazz)
     {

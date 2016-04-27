@@ -1,5 +1,6 @@
 package org.glassfish.jersey.examples.helloworld.rest;
 
+import com.oc.os.support.jaxrs.LIST;
 import org.glassfish.jersey.examples.helloworld.domain.FolderItems;
 import org.glassfish.jersey.examples.helloworld.domain.VirtualMachineEntity;
 import org.glassfish.jersey.examples.helloworld.domain.VolumeEntity;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class VirtualMachineResource
 {
     @GET
+    @LIST
     public Response listVirtualMachines()
     {
         System.out.println("berk, list vm ok");
@@ -55,10 +57,17 @@ public class VirtualMachineResource
         return Response.ok().build();
     }
 
-
-    @Path("{name}/clouddisk")
+    @Path("{vmname}/clouddisk")
     @GET
-    public Response listCloudDiskNames()
+    public CloudDiskResource getCloudDiskResource(@PathParam("vmname") String
+                                                              vmname)
+    {
+        return new CloudDiskResource(vmname);
+    }
+
+    @Path("{vmname}/clouddisk")
+    @GET
+    public Response listCloudDiskNames(@PathParam("vmname") String vmname)
     {
         return Response.ok(Arrays.asList("disk1,disk2")).build();
     }
