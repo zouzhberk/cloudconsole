@@ -1,7 +1,8 @@
-package com.oc.os.support.jaxrs;
+package com.oc.os.support.jaxrs.utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -24,5 +25,12 @@ public class ReflectUtil
 
         //Stream.of(clazz.getMethods()).filter(x-> x.get)
         return null;
+    }
+
+    public static <T extends Annotation> Optional<T> getDeclaredAnnotation
+            (Method method, Class<T> clazz)
+    {
+        return Optional.ofNullable(method.getDeclaredAnnotation(clazz));
+
     }
 }

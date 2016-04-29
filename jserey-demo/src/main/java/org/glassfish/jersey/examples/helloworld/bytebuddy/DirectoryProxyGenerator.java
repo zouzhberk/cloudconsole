@@ -1,6 +1,5 @@
 package org.glassfish.jersey.examples.helloworld.bytebuddy;
 
-import com.oc.os.support.jaxrs.DefaultResourceInfo;
 import com.oc.os.support.jaxrs.FileProxyContext;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.annotation.AnnotationDescription;
@@ -12,7 +11,6 @@ import org.glassfish.jersey.examples.helloworld.fileproxy.Binding;
 import org.glassfish.jersey.examples.helloworld.fileproxy.ElementalProxy;
 import org.glassfish.jersey.examples.helloworld.fileproxy.RSDirectoryProxy;
 
-import javax.ws.rs.container.ResourceInfo;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -66,8 +64,8 @@ public class DirectoryProxyGenerator implements RuntimeGenerator
                 Exception
         {
             FileProxyContext.from(t);
-            ResourceInfo resourceInfo = new DefaultResourceInfo();
-            
+            //ResourceInfo resourceInfo = new DefaultResourceInfo();
+
 
             System.out.println("hello," + "world" + ".");
             return Arrays.asList("hello", t.path, t.user);

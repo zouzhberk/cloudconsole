@@ -1,24 +1,14 @@
 package com.oc.os.support.jaxrs;
 
-import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * Created by berk (zouzhberk@163.com)) on 4/21/16.
  */
-public class DefaultResourceInfo implements javax.ws.rs.container.ResourceInfo
+public class DefaultResourceInfo
 {
-    Object resourceObject;
-    Method resourceMethod;
+    private FileProxyContext.OperationType operationType;
 
-    @Override
-    public Method getResourceMethod()
-    {
-        return null;
-    }
+    private Set<String> subresourcenames;
 
-    @Override
-    public Class<?> getResourceClass()
-    {
-        return null;
-    }
 }

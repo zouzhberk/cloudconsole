@@ -1,6 +1,13 @@
 package com.oc.os.support.jaxrs;
 
 
+import com.oc.os.support.jaxrs.utils.PathUtils;
+import com.oc.os.support.jaxrs.utils.ReflectUtil;
+
+import javax.ws.rs.Path;
+import java.lang.reflect.Method;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -22,9 +29,45 @@ public class ResourceNode
     {
         this.resourcePath.split("/");
 
+        Stream<DirectoryResourceInfo> parentInfos = PathUtils.parentPaths
+                (resourcePath)
+                .stream()
+                .map(p -> DirectoryResourceInfo.from(p, resourcePath));
 
-        Stream.of(resourceClass.getMethods())
-                .filter(x -> x.getAnnotation(LIST.class) != null);
+//        Observable.from(resourceClass.getDeclaredMethods())
+//                .filter(Method::isAccessible)
+//                .map(m -> {
+//                    Observable.from(m.getDeclaredAnnotations());
+//                    return m;
+//                });
+
+        Stream.of(resourceClass.getDeclaredMethods())
+                .filter(Method::isAccessible)
+                .map(m -> {
+
+                    ReflectUtil.getDeclaredAnnotation(m, LIST.class)
+                            .ifPresent(a -> {
+                                DirectoryResourceInfo info = new
+                                        DirectoryResourceInfo();
+
+                                ReflectUtil.getDeclaredAnnotation(m, Path.class)
+                                        .map(Path::value)
+                                        .map(p -> PathUtils.parentPaths(p,
+                                                resourcePath));
+                                info.resourcePath = "";
+                            });
+
+                    return null;
+                });
 
     }
+
+    public List<String> getPaths()
+    {
+        Paths.get(resourcePath)
+                .iterator()
+                .forEachRemaining(System.out::println);
+        return null;
+    }
+
 }

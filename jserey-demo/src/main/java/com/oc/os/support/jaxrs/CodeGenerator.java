@@ -6,6 +6,7 @@ import org.glassfish.jersey.examples.helloworld.rest.HelloWorldResource;
 import org.glassfish.jersey.examples.helloworld.rest.VirtualMachineResource;
 
 import javax.ws.rs.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -34,6 +35,21 @@ public class CodeGenerator
 
     public static void main(String[] args)
     {
+        DirectorySupplier supplier = DirectorySupplier.empty();
+        System.out.println(supplier.get());
+        System.out.println(supplier.append("asdfasdf", "test2").get());
+        System.out.println(supplier.append("asdfasdf", "test2").merge(DirectorySupplier.empty()
+                .append("berk")).get());
+    }
+
+    public static void main1(String[] args)
+    {
+        String resourcePath =
+                "/cloudos/virtualmachine/{vmname}/clouddisk/{diskname}";
+        Paths.get(resourcePath)
+                .iterator()
+                .forEachRemaining(System.out::println);
+
 
         ResourceConfig config = new ResourceConfig();
         config.registerClass(VirtualMachineResource.class);

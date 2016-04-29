@@ -86,6 +86,8 @@ public class FileProxyContext implements ResourceContext
     {
         READ,
         WRITE,
-        LIST
+        LIST,
+        INFO
+
     }
 }
