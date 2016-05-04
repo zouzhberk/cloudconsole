@@ -61,5 +61,6 @@
     <orderEntry type="library" exported="" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.springframework:spring-webmvc:4.2.5.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.springframework:spring-web:4.2.5.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.google.guava:guava:19.0" level="project" />
   </component>
 </module>

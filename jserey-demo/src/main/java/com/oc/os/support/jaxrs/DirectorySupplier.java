@@ -25,14 +25,20 @@ public interface DirectorySupplier extends Supplier<List<String>>
         return () -> Arrays.asList(items);
     }
 
+    static DirectorySupplier as(List<String> items)
+    {
+        if (items == null)
+        {
+            return empty();
+        }
+        return () -> items;
+    }
 
     default DirectorySupplier merge(DirectorySupplier otherSupplier)
     {
-        return () -> {
-            List<String> list = this.get();
-            list.addAll(otherSupplier.get());
-            return list;
-        };
+        List<String> list = get();
+        list.addAll(otherSupplier.get());
+        return as(list);
     }
 
     default DirectorySupplier append(String... elements)

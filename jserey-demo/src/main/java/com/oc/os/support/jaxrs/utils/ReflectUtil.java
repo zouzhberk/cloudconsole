@@ -33,4 +33,11 @@ public class ReflectUtil
         return Optional.ofNullable(method.getDeclaredAnnotation(clazz));
 
     }
+
+    public static boolean anyDeclaredAnnotation(Method method, Class<?
+            extends Annotation>... clazz)
+    {
+        return Stream.of(clazz)
+                .anyMatch(a -> method.getDeclaredAnnotation(a) != null);
+    }
 }
