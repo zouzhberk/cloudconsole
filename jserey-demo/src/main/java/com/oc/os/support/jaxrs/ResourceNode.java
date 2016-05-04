@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -177,8 +178,13 @@ public class ResourceNode
 
     public Function<Method, Object> invokeMapper()
     {
+        return method -> {
+            Parameter[] parameters = method.getParameters();
 
-        return null;
+            //Stream.of(parameters)
+
+            return null;
+        };
     }
 
     public Object invoke(Method m, Object... args)

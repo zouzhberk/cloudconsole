@@ -33,7 +33,7 @@ public class CodeGenerator
                 .collect(Collectors.joining("/", "/", ""));
     }
 
-    public static void main(String[] args)
+    public static void main2(String[] args)
     {
         DirectorySupplier supplier = DirectorySupplier.empty();
         System.out.println(supplier.get());
@@ -42,13 +42,8 @@ public class CodeGenerator
                 .append("berk")).get());
     }
 
-    public static void main1(String[] args)
+    public static void main(String[] args)
     {
-        String resourcePath =
-                "/cloudos/virtualmachine/{vmname}/clouddisk/{diskname}";
-        Paths.get(resourcePath)
-                .iterator()
-                .forEachRemaining(System.out::println);
 
 
         ResourceConfig config = new ResourceConfig();
