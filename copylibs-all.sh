@@ -27,4 +27,8 @@ cp /home/berk/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jack
 cp /home/berk/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.5.4/*/*.jar libs/
 cp /home/berk/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.5.4/*/*.jar libs/
 cp /home/berk/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.5.4/*/*.jar libs/
-
+cp /home/berk/.gradle/caches/modules-2/files-2.1/io.reactivex/rxjava/1.1.3/*/*.jar libs/
+cp /home/berk/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.0/*/*.jar libs/
+cp /home/berk/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/4.2.5.RELEASE/*/*.jar libs/
+cp /home/berk/.gradle/caches/modules-2/files-2.1/org.springframework/spring-webmvc/4.2.5.RELEASE/*/*.jar libs/
+cp /home/berk/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/19.0/*/*.jar libs/

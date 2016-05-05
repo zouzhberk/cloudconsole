@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -28,6 +30,11 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 public class DirectoryProxyGenerator
 {
     private DirectoryResourceInfo info;
+
+    public DirectoryProxyGenerator(DirectoryResourceInfo info)
+    {
+        this.info = info;
+    }
 
     public static Object getResourceObject(Class<?> resourceClass)
     {
@@ -97,9 +104,28 @@ public class DirectoryProxyGenerator
         return object;
     }
 
+    public static Optional<String> findPathParamValue(String resourcePath, String
+            realPath, String pathParam)
+    {
+        String str = "{" + pathParam + "}";
+
+        if (!resourcePath.contains(str))
+        {
+            return Optional.empty();
+        }
+        String bindingPath = resourcePath.replace(str, "[^/]+");
+
+        Pattern.compile(bindingPath)
+                .splitAsStream(realPath)
+                .forEach(System.out::println);
+        return Optional.empty();
+    }
+
     @RuntimeType
     public List<String> intercept(@This ElementalProxy t) throws Exception
     {
+        String realPath = t.path;
+
         Method m = info.getResourceMethod();
 
         Class<?> resourceClass = m.getDeclaringClass();
@@ -107,7 +133,16 @@ public class DirectoryProxyGenerator
 
         Parameter[] parameters = m.getParameters();
 
-        Stream.of(parameters).map(x -> {
+        Stream.of(parameters).map(parameter -> {
+
+            PathParam pathParam = parameter.getAnnotation(PathParam.class);
+
+            if (pathParam == null)
+            {
+                return null;
+            }
+
+            String pathName = pathParam.value();
 
 
             return null;
