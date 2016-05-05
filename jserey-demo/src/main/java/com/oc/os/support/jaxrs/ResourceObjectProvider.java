@@ -7,7 +7,8 @@ public class ResourceObjectProvider
 {
     public static class Holder
     {
-        public static ResourceObjectProvider provider = new ResourceObjectProvider();
+        public static ResourceObjectProvider provider = new
+                ResourceObjectProvider();
     }
 
 

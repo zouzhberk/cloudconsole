@@ -7,16 +7,15 @@ public class ResourcePath
 {
     public String resourcePath;
 
-
-    public String getRegexPath()
-    {
-        return resourcePath.replaceAll("\\{[^\\{]+\\}", "([^/]+)");
-    }
-
     public static void main(String[] args)
     {
         ResourcePath path = new ResourcePath();
         path.resourcePath = "/cloudos/{name1}/virtuamchine/{name2}";
         System.out.println(path.getRegexPath());
+    }
+
+    public String getRegexPath()
+    {
+        return resourcePath.replaceAll("\\{[^\\{]+\\}", "([^/]+)");
     }
 }

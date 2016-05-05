@@ -10,5 +10,4 @@ public abstract class RSDirectoryProxy extends ElementalProxy
     public abstract List<String> list();
 
 
-
 }

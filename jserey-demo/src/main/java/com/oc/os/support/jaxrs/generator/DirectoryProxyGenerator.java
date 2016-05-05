@@ -1,6 +1,9 @@
 package com.oc.os.support.jaxrs.generator;
 
 import com.oc.os.support.jaxrs.DirectoryResourceInfo;
+import com.oc.os.support.jaxrs.FileProxyContext;
+import com.oc.os.support.jaxrs.utils.ReflectUtil;
+import com.oc.os.support.jaxrs.utils.StringUtils;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.dynamic.DynamicType;
@@ -13,13 +16,20 @@ import org.glassfish.jersey.examples.helloworld.fileproxy.ElementalProxy;
 import org.glassfish.jersey.examples.helloworld.fileproxy.RSDirectoryProxy;
 
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -72,6 +82,58 @@ public class DirectoryProxyGenerator
         //  PatternUtil.match(bindingPath, realPath,"");
     }
 
+    public static Optional<String> findPathParamValue(String resourcePath,
+                                                      String realPath, String
+                                                              pathParam)
+    {
+        String str = "{" + pathParam + "}";
+
+        if (!resourcePath.contains(str))
+        {
+            return Optional.empty();
+        }
+        String bindingPath = resourcePath.replace(str, "([^/]+)/?");
+        Matcher matcher = Pattern.compile(bindingPath).matcher(realPath);
+
+        return Optional.of(matcher)
+                .filter(Matcher::matches)
+                .map(x -> x.group(1));
+    }
+
+    public static Function<Object, List<String>> getDirectoryResponseMapper()
+    {
+        Function<Object, List<String>> a = response -> {
+            if (response == null)
+            {
+                return Collections.emptyList();
+            }
+
+            if (!(response instanceof Response))
+            {
+                throw new RuntimeException("No support such type" +
+                        response.getClass());
+            }
+            Object entity = ((Response) response).getEntity();
+            if (entity instanceof Collection)
+            {
+                return ((Collection<?>) entity).stream().map(x -> {
+                    return x + "";
+                }).filter(StringUtils::nonEmpty).collect(Collectors.toList());
+            }
+
+            if (entity.getClass().isArray())
+            {
+                return Stream.of((Object[]) entity)
+                        .map(x -> x + "")
+                        .filter(StringUtils::nonEmpty)
+                        .collect(Collectors.toList());
+
+            }
+            return Collections.emptyList();
+        };
+        return a;
+    }
+
 
     public Class<? extends RSDirectoryProxy> generate()
     {
@@ -104,23 +166,6 @@ public class DirectoryProxyGenerator
         return object;
     }
 
-    public static Optional<String> findPathParamValue(String resourcePath, String
-            realPath, String pathParam)
-    {
-        String str = "{" + pathParam + "}";
-
-        if (!resourcePath.contains(str))
-        {
-            return Optional.empty();
-        }
-        String bindingPath = resourcePath.replace(str, "[^/]+");
-
-        Pattern.compile(bindingPath)
-                .splitAsStream(realPath)
-                .forEach(System.out::println);
-        return Optional.empty();
-    }
-
     @RuntimeType
     public List<String> intercept(@This ElementalProxy t) throws Exception
     {
@@ -131,24 +176,56 @@ public class DirectoryProxyGenerator
         Class<?> resourceClass = m.getDeclaringClass();
         Object object = getResourceObject(resourceClass);
 
-        Parameter[] parameters = m.getParameters();
+        Object[] args = Stream.of(m.getParameters()).map(parameter -> {
 
-        Stream.of(parameters).map(parameter -> {
 
+            System.out.println(parameter.isNamePresent());
             PathParam pathParam = parameter.getAnnotation(PathParam.class);
-
-            if (pathParam == null)
+            if (pathParam != null)
             {
-                return null;
+                if (!String.class.isAssignableFrom(parameter.getType()))
+                {
+                    throw new RuntimeException("The PathParam annotation only" +
+                            " support String type.");
+                }
+
+                String pathName = pathParam.value();
+
+
+                if (StringUtils.isEmpty(pathName))
+                {
+                    throw new RuntimeException("PathParam must not be empty");
+                }
+
+
+                return findPathParamValue(info.getResourcePath(), realPath,
+                        pathName)
+                        .orElse(null);
+
             }
 
-            String pathName = pathParam.value();
+            if (parameter.isAnnotationPresent(Context.class))
+            {
+                if (!FileProxyContext.class.isAssignableFrom(parameter
+                        .getType()))
+                {
+                    throw new RuntimeException(
+                            "The context annnotation only supports " +
+                                    FileProxyContext.class +
+                                    " class.");
+                }
 
+                return FileProxyContext.from(t);
 
+            }
             return null;
-        });
+        }).toArray();
 
-        return null;
+        Object response = ReflectUtil.invoke(object, m, args);
+        List<String> result = info.getMethodSupplier().get();
+        result.addAll(Optional.ofNullable(response)
+                .map(getDirectoryResponseMapper())
+                .orElseGet(Collections::emptyList));
+        return result;
     }
-
 }

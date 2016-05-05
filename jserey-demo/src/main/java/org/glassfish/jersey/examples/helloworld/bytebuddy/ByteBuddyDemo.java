@@ -11,7 +11,8 @@ public class ByteBuddyDemo
 //        ReadProxyGenerator readProxyGenerator = new ReadProxyGenerator();
 //        System.out.println(readProxyGenerator.generate());
 
-        DirectoryProxyGenerator directoryProxyGenerator = new DirectoryProxyGenerator();
+        DirectoryProxyGenerator directoryProxyGenerator = new
+                DirectoryProxyGenerator();
         System.out.println(directoryProxyGenerator.generate());
 
     }

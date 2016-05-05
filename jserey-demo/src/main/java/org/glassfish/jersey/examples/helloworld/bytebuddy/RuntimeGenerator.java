@@ -5,5 +5,5 @@ package org.glassfish.jersey.examples.helloworld.bytebuddy;
  */
 public interface RuntimeGenerator
 {
-    public Class<?> generate() throws Exception;
+    Class<?> generate() throws Exception;
 }

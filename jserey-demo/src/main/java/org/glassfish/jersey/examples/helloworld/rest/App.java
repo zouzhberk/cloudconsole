@@ -70,7 +70,6 @@ public class App
                     VirtualMachineResource.class);
 
 
-
             final HttpServer server = GrizzlyHttpServerFactory
                     .createHttpServer(BASE_URI, resourceConfig, false);
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable()

@@ -1,9 +1,9 @@
 package org.glassfish.jersey.examples.helloworld.generated;
 
-import org.glassfish.jersey.examples.helloworld.rest.ResourceFactory;
-import org.glassfish.jersey.examples.helloworld.rest.VirtualMachineResource;
 import org.glassfish.jersey.examples.helloworld.fileproxy.Binding;
 import org.glassfish.jersey.examples.helloworld.fileproxy.RSDirectoryProxy;
+import org.glassfish.jersey.examples.helloworld.rest.ResourceFactory;
+import org.glassfish.jersey.examples.helloworld.rest.VirtualMachineResource;
 
 import javax.ws.rs.core.Response;
 import java.util.List;

@@ -2,19 +2,16 @@ package com.oc.os.support.jaxrs;
 
 
 import com.google.common.collect.Maps;
+import com.oc.os.support.jaxrs.generator.DirectoryProxyGenerator;
 import com.oc.os.support.jaxrs.utils.ReflectUtil;
 import com.oc.os.support.jaxrs.utils.StringUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -98,40 +95,6 @@ public class ResourceNode
         return map;
     }
 
-    public static Function<Object, List<String>> getDirectoryResponseMapper()
-    {
-        Function<Object, List<String>> a = response -> {
-            if (response == null)
-            {
-                return Collections.emptyList();
-            }
-
-            if (!(response instanceof Response))
-            {
-                throw new RuntimeException("No support such type" +
-                        response.getClass());
-            }
-            Object entity = ((Response) response).getEntity();
-            if (entity instanceof Collection)
-            {
-                return ((Collection<?>) entity).stream().map(x -> {
-                    return x + "";
-                }).filter(StringUtils::nonEmpty).collect(Collectors.toList());
-            }
-
-            if (entity.getClass().isArray())
-            {
-                return Stream.of((Object[]) entity)
-                        .map(x -> x + "")
-                        .filter(StringUtils::nonEmpty)
-                        .collect(Collectors.toList());
-
-            }
-            return Collections.emptyList();
-        };
-        return a;
-    }
-
     public void parse()
     {
         this.resourcePath.split("/");
@@ -172,7 +135,7 @@ public class ResourceNode
                 .filter(Method::isAccessible)
                 .filter(x -> ReflectUtil.anyDeclaredAnnotation(x, LIST.class))
                 .map(m -> invoke(m))
-                .map(getDirectoryResponseMapper());
+                .map(DirectoryProxyGenerator.getDirectoryResponseMapper());
 
     }
 

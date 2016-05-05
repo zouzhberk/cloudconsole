@@ -82,7 +82,7 @@ public class FileProxyContext implements ResourceContext
         return null;
     }
 
-    public static enum OperationType
+    public enum OperationType
     {
         READ,
         WRITE,

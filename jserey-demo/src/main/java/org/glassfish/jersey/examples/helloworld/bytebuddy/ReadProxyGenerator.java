@@ -53,7 +53,7 @@ public class ReadProxyGenerator
     public interface ReadProxyInterceptor
     {
         @RuntimeType
-        public String intercept() throws Exception;
+        String intercept() throws Exception;
 
     }
 

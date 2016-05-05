@@ -5,10 +5,10 @@ package com.oc.os.support.jaxrs;
  */
 public interface FileProxyResourceInfo<T>
 {
-    public String getBindingPath();
+    String getBindingPath();
 
-    public FileProxyContext.OperationType getOperationType();
+    FileProxyContext.OperationType getOperationType();
 
-    public T getMethodSupplier();
+    T getMethodSupplier();
 
 }

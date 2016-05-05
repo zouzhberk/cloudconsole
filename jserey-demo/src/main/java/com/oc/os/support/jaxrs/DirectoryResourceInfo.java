@@ -23,6 +23,7 @@ public class DirectoryResourceInfo implements
         return resourceInfo;
     }
 
+    @Deprecated
     public DirectorySupplier getMethodSupplier()
     {
         return supplier;
@@ -44,6 +45,11 @@ public class DirectoryResourceInfo implements
         return resourceMethod;
     }
 
+
+    public String getResourcePath()
+    {
+        return resourcePath;
+    }
 //    public static String getFirstChars(String path)
 //    {
 //        return null;

@@ -2,6 +2,7 @@ package com.oc.os.support.jaxrs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -39,6 +40,15 @@ public interface DirectorySupplier extends Supplier<List<String>>
         List<String> list = get();
         list.addAll(otherSupplier.get());
         return as(list);
+    }
+
+    default DirectorySupplier append(Collection<String> elements)
+    {
+        return () -> {
+            List<String> list = this.get();
+            list.addAll(elements);
+            return list;
+        };
     }
 
     default DirectorySupplier append(String... elements)

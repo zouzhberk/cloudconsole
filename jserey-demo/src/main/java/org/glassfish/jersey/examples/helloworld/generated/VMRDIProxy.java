@@ -1,8 +1,8 @@
 package org.glassfish.jersey.examples.helloworld.generated;
 
-import org.glassfish.jersey.examples.helloworld.rest.VirtualMachineResource;
 import org.glassfish.jersey.examples.helloworld.fileproxy.Binding;
 import org.glassfish.jersey.examples.helloworld.fileproxy.RSReadProxy;
+import org.glassfish.jersey.examples.helloworld.rest.VirtualMachineResource;
 
 /**
  * Created by berk (zouzhberk@163.com)) on 4/14/16.

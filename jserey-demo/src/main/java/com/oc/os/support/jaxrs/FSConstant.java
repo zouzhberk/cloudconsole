@@ -5,6 +5,6 @@ package com.oc.os.support.jaxrs;
  */
 public interface FSConstant
 {
-    public static final String INFO_FILE_NAME = "info";
+    String INFO_FILE_NAME = "info";
 
 }

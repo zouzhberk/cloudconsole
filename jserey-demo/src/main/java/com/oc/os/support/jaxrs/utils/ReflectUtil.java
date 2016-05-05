@@ -1,6 +1,7 @@
 package com.oc.os.support.jaxrs.utils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -39,5 +40,21 @@ public class ReflectUtil
     {
         return Stream.of(clazz)
                 .anyMatch(a -> method.getDeclaredAnnotation(a) != null);
+    }
+
+    public static Object invoke(Object object, Method method, Object... args)
+    {
+        try
+        {
+            if (args.length > 0)
+            {
+                return method.invoke(object, args);
+            }
+            return method.invoke(object);
+        }
+        catch (IllegalAccessException | InvocationTargetException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }
