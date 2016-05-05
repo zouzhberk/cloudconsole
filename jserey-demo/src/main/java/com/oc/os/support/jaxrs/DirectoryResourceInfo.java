@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
  */
 public class DirectoryResourceInfo implements
         FileProxyResourceInfo<DirectorySupplier>
-
 {
     String resourcePath;
     DirectorySupplier supplier;

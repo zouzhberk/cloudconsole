@@ -134,8 +134,8 @@ public class ResourceNode
         Stream.of(resourceClass.getDeclaredMethods())
                 .filter(Method::isAccessible)
                 .filter(x -> ReflectUtil.anyDeclaredAnnotation(x, LIST.class))
-                .map(m -> invoke(m))
-                .map(DirectoryProxyGenerator.getDirectoryResponseMapper());
+                .map(m -> m);
+
 
     }
 
