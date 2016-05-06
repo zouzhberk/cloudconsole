@@ -17,7 +17,7 @@ import java.util.UUID;
 @Produces("application/json")
 public class VirtualMachineResource
 {
-    @GET
+
     @LIST
     public Response listVirtualMachines()
     {
@@ -59,8 +59,7 @@ public class VirtualMachineResource
 
     @Path("{vmname}/clouddisk")
     @GET
-    public CloudDiskResource getCloudDiskResource(@PathParam("vmname") String
-                                                              vmname)
+    public CloudDiskResource getCloudDiskResource(@PathParam("vmname") String vmname)
     {
         return new CloudDiskResource(vmname);
     }
@@ -74,8 +73,7 @@ public class VirtualMachineResource
 
     @Path("{vmname}/clouddisk/{diskname}")
     @GET
-    public Response getCloudDiskInfo(@PathParam("vmname") String vmname,
-                                     @PathParam("diskname") String diskname)
+    public Response getCloudDiskInfo(@PathParam("vmname") String vmname, @PathParam("diskname") String diskname)
     {
         VolumeEntity info = new VolumeEntity();
         info.setUuid(UUID.randomUUID().toString());

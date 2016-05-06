@@ -39,19 +39,20 @@
  */
 package org.glassfish.jersey.examples.helloworld.rest;
 
-import javax.ws.rs.GET;
+import com.oc.os.support.jaxrs.LIST;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 /**
  * @author Jakub Podlesak (jakub.podlesak at oracle.com)
  */
-@Path("/helloworld")
+@Path("/cloudos/helloworld")
 public class HelloWorldResource
 {
     public static final String CLICHED_MESSAGE = "Hello World!";
 
-    @GET
+    @LIST
     @Produces("text/plain")
     public String getHello()
     {

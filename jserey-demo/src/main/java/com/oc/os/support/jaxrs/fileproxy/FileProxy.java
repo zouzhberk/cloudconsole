@@ -1,4 +1,4 @@
-package org.glassfish.jersey.examples.helloworld.fileproxy;
+package com.oc.os.support.jaxrs.fileproxy;
 
 import jersey.repackaged.com.google.common.collect.Maps;
 import org.glassfish.jersey.examples.helloworld.rest.ResourceFactory;

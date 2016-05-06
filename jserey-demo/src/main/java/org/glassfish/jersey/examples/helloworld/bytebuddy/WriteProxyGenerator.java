@@ -6,8 +6,8 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
-import org.glassfish.jersey.examples.helloworld.fileproxy.Binding;
-import org.glassfish.jersey.examples.helloworld.fileproxy.RSWriteProxy;
+import com.oc.os.support.jaxrs.fileproxy.Binding;
+import com.oc.os.support.jaxrs.fileproxy.RSWriteProxy;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package org.glassfish.jersey.examples.helloworld.fileproxy;
+package com.oc.os.support.jaxrs.fileproxy;
 
 import java.lang.annotation.*;
 

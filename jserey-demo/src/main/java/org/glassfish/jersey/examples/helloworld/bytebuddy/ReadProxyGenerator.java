@@ -7,9 +7,9 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.This;
-import org.glassfish.jersey.examples.helloworld.fileproxy.Binding;
-import org.glassfish.jersey.examples.helloworld.fileproxy.ElementalProxy;
-import org.glassfish.jersey.examples.helloworld.fileproxy.RSReadProxy;
+import com.oc.os.support.jaxrs.fileproxy.Binding;
+import com.oc.os.support.jaxrs.fileproxy.ElementalProxy;
+import com.oc.os.support.jaxrs.fileproxy.RSReadProxy;
 
 import java.util.Arrays;
 import java.util.UUID;

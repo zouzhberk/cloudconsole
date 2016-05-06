@@ -1,6 +1,10 @@
 package org.glassfish.jersey.examples.helloworld.bytebuddy;
 
 import com.oc.os.support.jaxrs.FileProxyContext;
+import com.oc.os.support.jaxrs.fileproxy.Binding;
+import com.oc.os.support.jaxrs.fileproxy.ElementalProxy;
+import com.oc.os.support.jaxrs.fileproxy.RSDirectoryProxy;
+import com.oc.os.support.jaxrs.generator.RuntimeGenerator;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.dynamic.DynamicType;
@@ -8,9 +12,6 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.This;
-import org.glassfish.jersey.examples.helloworld.fileproxy.Binding;
-import org.glassfish.jersey.examples.helloworld.fileproxy.ElementalProxy;
-import org.glassfish.jersey.examples.helloworld.fileproxy.RSDirectoryProxy;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -27,26 +28,21 @@ public class DirectoryProxyGenerator implements RuntimeGenerator
 {
 
     @Override
-    public Class<?> generate() throws Exception
+    public Class<? extends ElementalProxy> generate() throws Exception
     {
         String bindingpath = "/virtualmachine/info";
         String generatedClassPath = "com.berk.VMReadProxy";
 
-        DynamicType.Unloaded<RSDirectoryProxy> buddy = new ByteBuddy()
-                .subclass(RSDirectoryProxy.class)
-                .annotateType(AnnotationDescription.Builder.ofType(Binding
-                        .class)
-                        .define("value", bindingpath)
-                        .build())
+        DynamicType.Unloaded<RSDirectoryProxy> buddy = new ByteBuddy().subclass(RSDirectoryProxy.class)
+                .annotateType(AnnotationDescription.Builder.ofType(Binding.class).define("value", bindingpath).build())
                 .name(generatedClassPath)
                 .method(named("list"))
                 .intercept(MethodDelegation.to(this))
                 .make();
 
         buddy.saveIn(new File("testjar"));
-        Class<? extends RSDirectoryProxy> object = buddy.load(ByteBuddyDemo
-                .class
-                .getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
+        Class<? extends RSDirectoryProxy> object = buddy.load(ByteBuddyDemo.class.getClassLoader(),
+                ClassLoadingStrategy.Default.WRAPPER)
                 .getLoaded();
         System.out.println(Arrays.asList(object.getAnnotations()));
 
@@ -97,8 +93,7 @@ public class DirectoryProxyGenerator implements RuntimeGenerator
     public static class DefaultDirectoryProxyInterceptor
     {
         //@RuntimeType
-        public static List<String> intercept(@This ElementalProxy t) throws
-                Exception
+        public static List<String> intercept(@This ElementalProxy t) throws Exception
         {
             FileProxyContext.from(t);
             //ResourceInfo resourceInfo = new DefaultResourceInfo();

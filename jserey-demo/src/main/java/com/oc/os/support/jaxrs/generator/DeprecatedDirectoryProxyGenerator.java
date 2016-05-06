@@ -1,10 +1,7 @@
 package com.oc.os.support.jaxrs.generator;
 
+import com.oc.os.support.jaxrs.DirectoryResourceInfo;
 import com.oc.os.support.jaxrs.FileProxyContext;
-import com.oc.os.support.jaxrs.ResourceTreeNode;
-import com.oc.os.support.jaxrs.fileproxy.Binding;
-import com.oc.os.support.jaxrs.fileproxy.ElementalProxy;
-import com.oc.os.support.jaxrs.fileproxy.RSDirectoryProxy;
 import com.oc.os.support.jaxrs.utils.ReflectUtil;
 import com.oc.os.support.jaxrs.utils.StringUtils;
 import net.bytebuddy.ByteBuddy;
@@ -14,6 +11,9 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.This;
+import com.oc.os.support.jaxrs.fileproxy.Binding;
+import com.oc.os.support.jaxrs.fileproxy.ElementalProxy;
+import com.oc.os.support.jaxrs.fileproxy.RSDirectoryProxy;
 
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -37,11 +37,12 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 /**
  * Created by berk (zouzhberk@163.com)) on 5/4/16.
  */
-public class DirectoryProxyGenerator implements RuntimeGenerator
+@Deprecated
+public class DeprecatedDirectoryProxyGenerator
 {
-    private ResourceTreeNode info;
+    private DirectoryResourceInfo info;
 
-    public DirectoryProxyGenerator(ResourceTreeNode info)
+    public DeprecatedDirectoryProxyGenerator(DirectoryResourceInfo info)
     {
         this.info = info;
     }
@@ -132,9 +133,6 @@ public class DirectoryProxyGenerator implements RuntimeGenerator
     public Class<? extends RSDirectoryProxy> generate()
     {
         String bindingpath = info.getBindingPath();
-        System.out.println(bindingpath + "," + info.getProxyClassName() + "," + info.childrenNames());
-
-
         String generatedClassPath = info.getProxyClassName();
 
         DynamicType.Unloaded<? extends RSDirectoryProxy> buddy = new ByteBuddy().subclass(RSDirectoryProxy.class)
@@ -146,7 +144,7 @@ public class DirectoryProxyGenerator implements RuntimeGenerator
 
         try
         {
-            buddy.saveIn(new File("testjar1"));
+            buddy.saveIn(new File("testjar"));
         }
         catch (IOException e)
         {
@@ -182,14 +180,15 @@ public class DirectoryProxyGenerator implements RuntimeGenerator
                 }
 
                 String pathName = pathParam.value();
-                System.out.println(info.hasPathParam(pathName));
+
+
                 if (StringUtils.isEmpty(pathName))
                 {
                     throw new RuntimeException("PathParam must not be empty");
                 }
 
 
-                return findPathParamValue(info.getResourcePath(), realPath, info.getName()).orElse(null);
+                return findPathParamValue(info.getResourcePath(), realPath, pathName).orElse(null);
 
             }
 
@@ -209,12 +208,10 @@ public class DirectoryProxyGenerator implements RuntimeGenerator
         }).toArray();
 
         Object response = ReflectUtil.invoke(object, m, args);
-        Stream<String> result = info.childrenNames().stream().filter(x -> !x.startsWith("{"));
-
-        return Stream.concat(result, Optional.ofNullable(response)
+        List<String> result = info.getMethodSupplier().get();
+        result.addAll(Optional.ofNullable(response)
                 .map(getDirectoryResponseMapper())
-                .orElseGet(Collections::emptyList)
-                .stream()).distinct().collect(Collectors.toList());
-
+                .orElseGet(Collections::emptyList));
+        return result;
     }
 }

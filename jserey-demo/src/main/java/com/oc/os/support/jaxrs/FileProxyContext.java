@@ -1,7 +1,7 @@
 package com.oc.os.support.jaxrs;
 
 import jersey.repackaged.com.google.common.collect.Maps;
-import org.glassfish.jersey.examples.helloworld.fileproxy.*;
+import com.oc.os.support.jaxrs.fileproxy.*;
 
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.container.ResourceInfo;

@@ -18,18 +18,21 @@ public class ReflectUtil
         return clazz.getAnnotation(annotationClass) != null;
     }
 
+    public static boolean hasAnnotation(Method method, Class<? extends
+            Annotation> annotationClass)
+    {
+        return method.getAnnotation(annotationClass) != null;
+    }
 
-    public static Stream<Method> getMethodByAnnotation(Class<?> clazz,
-                                                       Annotation...
-                                                               annotations)
+
+    public static Stream<Method> getMethodByAnnotation(Class<?> clazz, Annotation... annotations)
     {
 
         //Stream.of(clazz.getMethods()).filter(x-> x.get)
         return null;
     }
 
-    public static <T extends Annotation> Optional<T> getDeclaredAnnotation
-            (Method method, Class<T> clazz)
+    public static <T extends Annotation> Optional<T> getDeclaredAnnotation(Method method, Class<T> clazz)
     {
         return Optional.ofNullable(method.getDeclaredAnnotation(clazz));
 
@@ -38,8 +41,7 @@ public class ReflectUtil
     public static boolean anyDeclaredAnnotation(Method method, Class<?
             extends Annotation>... clazz)
     {
-        return Stream.of(clazz)
-                .anyMatch(a -> method.getDeclaredAnnotation(a) != null);
+        return Stream.of(clazz).anyMatch(a -> method.getDeclaredAnnotation(a) != null);
     }
 
     public static Object invoke(Object object, Method method, Object... args)

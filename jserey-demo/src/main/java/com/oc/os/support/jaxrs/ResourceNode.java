@@ -2,7 +2,6 @@ package com.oc.os.support.jaxrs;
 
 
 import com.google.common.collect.Maps;
-import com.oc.os.support.jaxrs.generator.DirectoryProxyGenerator;
 import com.oc.os.support.jaxrs.utils.ReflectUtil;
 import com.oc.os.support.jaxrs.utils.StringUtils;
 
@@ -32,20 +31,8 @@ public class ResourceNode
         this.resourcePath = resourcePath;
     }
 
-    public static void main(String[] args)
-    {
-        System.out.println(parentPaths("/", "/cloudos/virtualmachine"));
 
-        System.out.println(parentPaths("/cloudos/virtualmachine", "{vmname}"));
-        System.out.println(parentPaths("/cloudos/virtualmachine",
-                "{vmname}/clouddisk"));
-        System.out.println(parentPaths("/cloudos/virtualmachine",
-                "{vmname}///clouddisk/{diskname}"));
-
-    }
-
-    public static Map<String, String> parentPaths(String rootPath, String
-            resPath)
+    public static Map<String, String> parentPaths(String rootPath, String resPath)
     {
         Map<String, String> map = Maps.newHashMap();
         if (StringUtils.isEmpty(resPath))
@@ -53,9 +40,7 @@ public class ResourceNode
             return map;
         }
 
-        String[] segments = Stream.of(resPath.split("/+"))
-                .filter(StringUtils::nonEmpty)
-                .toArray(String[]::new);
+        String[] segments = Stream.of(resPath.split("/+")).filter(StringUtils::nonEmpty).toArray(String[]::new);
 
         if (segments.length == 0)
         {
@@ -95,13 +80,42 @@ public class ResourceNode
         return map;
     }
 
+
+    public ResourceTreeNode parse1(ResourceTreeNode rootNode)
+    {
+        final ResourceTreeNode node = rootNode.addChild(resourcePath);
+
+        Stream.of(resourceClass.getDeclaredMethods()).forEach(m -> {
+            ResourceTreeNode tmpnode = ReflectUtil.getDeclaredAnnotation(m, Path.class)
+                    .map(Path::value)
+                    .filter(StringUtils::nonEmpty)
+                    .map(node::addChild)
+                    .orElse(node);
+            if (ReflectUtil.hasAnnotation(m, LIST.class))
+            {
+                tmpnode.setResourceMethod(m);
+            }
+
+            if (ReflectUtil.hasAnnotation(m, GET.class))
+            {
+                tmpnode.addChild(new ResourceTreeNode("info", tmpnode, m, RequestType.GET));
+            }
+
+            if (ReflectUtil.hasAnnotation(m, POST.class))
+            {
+                tmpnode.addChild(new ResourceTreeNode("post", null, m, RequestType.POST));
+            }
+
+        });
+
+        return node;
+    }
+
     public void parse()
     {
         this.resourcePath.split("/");
         // 1. 获取class路径, 所有Directory方法。
-        Stream<DirectoryResourceInfo> parentInfos = parentPaths("/",
-                resourcePath)
-                .entrySet()
+        Stream<DirectoryResourceInfo> parentInfos = parentPaths("/", resourcePath).entrySet()
                 .stream()
                 .map(x -> DirectoryResourceInfo.from(x.getKey(), x.getValue()));
 
@@ -114,16 +128,13 @@ public class ResourceNode
         Function<String, Stream<DirectoryResourceInfo>> mapper = p -> {
             return parentPaths(resourcePath, p).entrySet()
                     .stream()
-                    .map(x -> DirectoryResourceInfo.from(x.getKey(), x
-                            .getValue()));
+                    .map(x -> DirectoryResourceInfo.from(x.getKey(), x.getValue()));
         };
 
         // 2. 获取method path, 所有Directory方法。
-        Stream<DirectoryResourceInfo> info1 = Stream.of(resourceClass
-                .getDeclaredMethods())
+        Stream<DirectoryResourceInfo> info1 = Stream.of(resourceClass.getDeclaredMethods())
                 .filter(Method::isAccessible)
-                .filter(x -> ReflectUtil.anyDeclaredAnnotation(x, LIST.class,
-                        GET.class, POST.class))
+                .filter(x -> ReflectUtil.anyDeclaredAnnotation(x, LIST.class, GET.class, POST.class))
                 .flatMap(m -> ReflectUtil.getDeclaredAnnotation(m, Path.class)
                         .map(Path::value)
                         .map(Stream::of)
