@@ -14,9 +14,10 @@ public class GeneratorFactory
             case LIST:
                 return new DirectoryProxyGenerator(node);
             case GET:
-                break;
+
+                return new GetProxyGenerator(node);
             case POST:
-                break;
+                return new PostProxyGenerator(node);
         }
         return null;
     }

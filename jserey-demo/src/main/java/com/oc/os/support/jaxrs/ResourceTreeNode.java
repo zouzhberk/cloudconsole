@@ -309,7 +309,7 @@ public class ResourceTreeNode
 
     public String getProxyClassName()
     {
-        return "com.berk.test." + "FP" + getPrefixName().toUpperCase() + Instant.now().getNano();
+        return "com.berk.test." + "FP" + getPrefixName().toUpperCase() + this.getType() + Instant.now().getNano();
     }
 
     public String getShortName()

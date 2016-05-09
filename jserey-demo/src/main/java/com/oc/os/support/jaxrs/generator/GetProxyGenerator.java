@@ -18,8 +18,10 @@ import org.glassfish.jersey.examples.helloworld.bytebuddy.ByteBuddyDemo;
 
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -47,9 +49,6 @@ public class GetProxyGenerator extends BaseCodeGenerator
         Object object = getResourceObject(resourceClass);
 
         Object[] args = Stream.of(m.getParameters()).map(parameter -> {
-
-
-            System.out.println(parameter.isNamePresent());
             PathParam pathParam = parameter.getAnnotation(PathParam.class);
             if (pathParam != null)
             {
@@ -87,15 +86,19 @@ public class GetProxyGenerator extends BaseCodeGenerator
 
         Object response = ReflectUtil.invoke(object, m, args);
 
-        return response.toString();
+        if (response instanceof Response)
+        {
+            return ((Response) response).getEntity() + "";
+        }
+        return response + "";
 
     }
 
     @Override
     public Class<? extends ElementalProxy> generate() throws Exception
     {
-        String bindingpath = "/virtualmachine/info";
-        String generatedClassPath = "com.berk.VMReadProxy";
+        String bindingpath = info.getBindingPath();
+        String generatedClassPath = info.getProxyClassName();
 
         DynamicType.Unloaded<RSReadProxy> buddy = new ByteBuddy().subclass(RSReadProxy.class)
                 .annotateType(AnnotationDescription.Builder.ofType(Binding.class).define("value", bindingpath).build())
@@ -104,13 +107,18 @@ public class GetProxyGenerator extends BaseCodeGenerator
                 .intercept(MethodDelegation.to(this))
                 .make();
 
+        try
+        {
+            buddy.saveIn(new File("testjar1"));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
         Class<? extends RSReadProxy> object = buddy.load(ByteBuddyDemo.class.getClassLoader(), ClassLoadingStrategy
                 .Default.WRAPPER)
                 .getLoaded();
-        System.out.println(Arrays.asList(object.getAnnotations()));
-
-        System.out.println(object.getAnnotation(Binding.class).value());
-        System.out.println(object.newInstance().read());
 
         return object;
     }

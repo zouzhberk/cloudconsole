@@ -58,14 +58,13 @@ public class VirtualMachineResource
     }
 
     @Path("{vmname}/clouddisk")
-    @GET
     public CloudDiskResource getCloudDiskResource(@PathParam("vmname") String vmname)
     {
         return new CloudDiskResource(vmname);
     }
 
     @Path("{vmname}/clouddisk")
-    @GET
+    @LIST
     public Response listCloudDiskNames(@PathParam("vmname") String vmname)
     {
         return Response.ok(Arrays.asList("disk1,disk2")).build();

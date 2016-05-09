@@ -30,8 +30,7 @@ public class CloudDiskResource
 
     @Path("{diskname}")
     @GET
-    public Response getCloudDiskInfo(@PathParam("vmname") String vmname,
-                                     @PathParam("diskname") String diskname)
+    public Response getCloudDiskInfo(@PathParam("vmname") String vmname, @PathParam("diskname") String diskname)
     {
         VolumeEntity info = new VolumeEntity();
         info.setUuid(UUID.randomUUID().toString());
